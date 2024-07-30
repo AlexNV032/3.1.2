@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+    <style>
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .action-buttons form {
+            margin: 0;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h2>Users</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.name}">John Doe</td>
+        <td th:text="${user.email}">john@example.com</td>
+        <td>
+            <div class="action-buttons">
+                <form th:action="@{/update}" method="get">
+                    <input type="hidden" name="id" th:value="${user.id}" />
+                    <button type="submit">Update</button>
+                </form>
+                <form th:action="@{/delete}" method="post">
+                    <input type="hidden" name="id" th:value="${user.id}" />
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<form th:action="@{/add}" th:object="${user}" method="post">
+    <label>Name: <input type="text" th:field="*{name}"/></label>
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></span>
+    <label>Email: <input type="text" th:field="*{email}"/></label>
+    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error"></span>
+    <button type="submit">Add User</button>
+</form>
+</body>
+</html>
